@@ -1,0 +1,34 @@
+{
+  "description": "Task 2 schema: ATC readback safety judgment. Defines error types, risk levels, and their definitions used by DDR/WDS evaluation.",
+  "risk_levels": {
+    "CORRECT":  { "order": 0, "description": "Readback is operationally correct; no hazard" },
+    "HIGH":     { "order": 1, "description": "Error present but immediate safety impact is limited; requires correction" },
+    "CRITICAL": { "order": 2, "description": "Error could directly cause a safety incident if not caught" },
+    "EXTREME":  { "order": 3, "description": "Error is likely to cause an immediate collision, runway incursion, or CFIT if not corrected" }
+  },
+  "error_types": {
+    "CORRECT":          { "risk": "CORRECT",  "description": "Pilot readback is an accurate restatement of the clearance" },
+    "FILLER_CORRECT":   { "risk": "CORRECT",  "description": "Readback includes filler words (uh, um, er) but is operationally correct" },
+    "NUMBER_FORMAT":    { "risk": "HIGH",     "description": "Numerical value is rephrased in a different but equivalent format (e.g., 'three five zero' vs 'flight level three five zero')" },
+    "VALUE_HIGH":       { "risk": "HIGH",     "description": "A non-critical numeric or named value is read back incorrectly" },
+    "OMISSION_HIGH":    { "risk": "HIGH",     "description": "A non-critical instruction component is omitted from the readback" },
+    "CONSTRAINT_HIGH":  { "risk": "HIGH",     "description": "An execution condition or restriction (e.g., 'after RIVER', 'when able') is missing or altered" },
+    "VALUE_CRITICAL":   { "risk": "CRITICAL", "description": "A safety-critical value (altitude, heading, runway, callsign) is read back with an incorrect value" },
+    "OMISSION_CRITICAL":{ "risk": "CRITICAL", "description": "A safety-critical instruction component is omitted entirely" },
+    "TARGET_CRITICAL":  { "risk": "CRITICAL", "description": "The addressed callsign or clearance target is wrong or missing" },
+    "MULTI_ERROR":      { "risk": "EXTREME",  "description": "Multiple independent errors co-occur, compounding the safety risk" }
+  },
+  "output_format": {
+    "is_correct": "<boolean>",
+    "error_type": "<one of the 10 error_type keys above>",
+    "risk_level": "<CORRECT | HIGH | CRITICAL | EXTREME>",
+    "affected_slot": "<the slot name most affected, e.g. altitude, heading, runway, or null if CORRECT>",
+    "explanation": "<brief free-text rationale>"
+  },
+  "evaluation_notes": [
+    "DDR (Danger Downgrade Rate): fraction of predictions where predicted risk < ground-truth risk. Lower is better.",
+    "WDS (Weighted Downgrade Severity): DDR weighted by the severity of the downgrade. Lower is better.",
+    "CONSTRAINT_HIGH is the hardest error type: models tend to treat execution conditions as optional modifiers.",
+    "EXTREME errors should never be downgraded; the risk-aware loss uses sample weight 2.0 for EXTREME samples."
+  ]
+}
