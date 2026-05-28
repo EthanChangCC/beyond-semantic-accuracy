@@ -1,6 +1,6 @@
 # Beyond Semantic Accuracy: Consequence-Aware Evaluation for Safety-Critical Language Understanding
 
-This repository contains datasets, prompts, fine-tuning scripts, and model weights to reproduce the experiments in our paper.
+This repository contains datasets, prompts, evaluation scripts, fine-tuning scripts, and model weights to reproduce the experiments in our paper.
 
 ---
 
@@ -40,6 +40,10 @@ This repository contains datasets, prompts, fine-tuning scripts, and model weigh
 │   ├── train_task2.py              # Task 2 training entry point
 │   ├── infer_task1.py              # Task 1 batch inference (LoRA)
 │   └── infer_task2.py              # Task 2 batch inference (LoRA)
+├── eval/
+│   ├── eval_task1_nonlinear.py     # AR-Geo / AR-Lin / ERP scoring (Task 1 primary metrics)
+│   ├── eval_readback.py            # ET-MF1 / RL-Acc / DDR / WDS scoring (Task 2 metrics)
+│   └── eval_task1.py               # AR-Lin baseline scorer (linear weighted average)
 └── configs/                        # LLaMA-Factory YAML configs (CE baseline)
 ```
 
@@ -64,6 +68,51 @@ Given a controller utterance and a pilot readback, classify:
 - `affected_slot` and `explanation`
 
 **Evaluation metrics:** ET-MF1, RL-Acc, DDR (Danger Downgrade Rate), WDS (Weighted Downgrade Severity)
+
+---
+
+## Evaluation
+
+### Task 1
+
+```bash
+# Score one or more model output files (JSONL with 'prediction' field)
+python eval/eval_task1_nonlinear.py output/task1/zeroshot/gpt-4o-mini.jsonl
+
+# Score a whole directory
+python eval/eval_task1_nonlinear.py output/task1/zeroshot/
+
+# AR-Lin baseline only
+python eval/eval_task1.py output/task1/zeroshot/
+```
+
+Produces AR-Geo, AR-Lin, and ERP scores side-by-side. AR-Geo is the primary metric reported in the paper: it applies a weighted geometric mean where any missing critical slot collapses the score toward zero.
+
+### Task 2
+
+```bash
+python eval/eval_readback.py output/task2/zeroshot/deepseek-chat.jsonl
+
+# Directory (prints per-model table)
+python eval/eval_readback.py output/task2/ablation/
+```
+
+Produces ET-MF1, RL-Acc, DDR (Danger Downgrade Rate), and WDS (Weighted Downgrade Severity).
+
+**Expected input format** — each line of a prediction JSONL:
+
+```json
+{
+  "id": "rb1k_0001",
+  "prediction": {
+    "is_correct": false,
+    "error_type": "VALUE_HIGH",
+    "risk_level": "HIGH",
+    "affected_slot": "speed",
+    "explanation": "..."
+  }
+}
+```
 
 ---
 
