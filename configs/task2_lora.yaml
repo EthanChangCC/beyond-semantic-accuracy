@@ -1,0 +1,47 @@
+### Model
+model_name_or_path: /root/autodl-tmp/models/Qwen/Qwen3-8B
+trust_remote_code: true
+
+### Method
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_rank: 32
+lora_alpha: 64
+lora_dropout: 0.05
+lora_target: all
+
+### Dataset
+dataset: atc_task2_train
+eval_dataset: atc_task2_val
+dataset_dir: /root/autodl-tmp/data
+template: qwen3
+cutoff_len: 2048
+max_samples: 853
+overwrite_cache: true
+preprocessing_num_workers: 4
+
+### Output
+output_dir: /root/autodl-tmp/output/qwen3-8b-atc-task2-lora
+logging_steps: 20
+save_steps: 100
+save_total_limit: 3
+plot_loss: true
+overwrite_output_dir: true
+
+### Train
+per_device_train_batch_size: 8
+gradient_accumulation_steps: 2
+learning_rate: 1.0e-4
+num_train_epochs: 5.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.05
+bf16: true
+ddp_timeout: 180000000
+report_to: none
+
+### Eval
+val_size: 0.0
+eval_strategy: steps
+eval_steps: 100
+per_device_eval_batch_size: 4
