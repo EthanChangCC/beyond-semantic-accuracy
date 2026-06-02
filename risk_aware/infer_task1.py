@@ -1,16 +1,16 @@
 """
 Inference script for Task 1 fine-tuned model (LoRA adapter).
 
-Loads the LoRA adapter, reads hard_final.jsonl, runs inference,
-and saves predictions in the same format as API-based scripts.
+Loads the LoRA adapter, reads the Task 1 evaluation set (eval.jsonl),
+runs inference, and saves predictions in the same format as API-based scripts.
 
-Usage (on AutoDL):
+Usage:
   python infer_task1.py \
-      --adapter_dir   /root/autodl-tmp/output/qwen3-8b-atc-task1-risk-lora \
-      --base_model    /root/autodl-tmp/models/Qwen/Qwen3-8B \
-      --input_jsonl   /root/autodl-tmp/data/task1/hard_final.jsonl \
-      --prompt_txt    /root/autodl-tmp/prompt/prompt_label_ft.txt \
-      --output_jsonl  /root/autodl-tmp/output/task1/finetune/qwen3-8b-task1-risk-lora.jsonl
+      --adapter_dir   checkpoints/task1-risk-lora \
+      --base_model    Qwen/Qwen3-8B \
+      --input_jsonl   data-finetune/task1/eval.jsonl \
+      --prompt_txt    prompt/prompt_label_ft.txt \
+      --output_jsonl  output/task1/finetune/qwen3-8b-task1-risk-lora.jsonl
 """
 
 import json
@@ -31,15 +31,15 @@ logger = logging.getLogger(__name__)
 def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--adapter_dir",  type=str,
-                   default="/root/autodl-tmp/output/qwen3-8b-atc-task1-risk-lora")
+                   default="checkpoints/task1-risk-lora")
     p.add_argument("--base_model",   type=str,
-                   default="/root/autodl-tmp/models/Qwen/Qwen3-8B")
+                   default="Qwen/Qwen3-8B")
     p.add_argument("--input_jsonl",  type=str,
-                   default="/root/autodl-tmp/data/task1/hard_final.jsonl")
+                   default="data-finetune/task1/eval.jsonl")
     p.add_argument("--prompt_txt",   type=str,
-                   default="/root/autodl-tmp/prompt/prompt_label_ft.txt")
+                   default="prompt/prompt_label_ft.txt")
     p.add_argument("--output_jsonl", type=str,
-                   default="/root/autodl-tmp/output/task1/finetune/qwen3-8b-task1-risk-lora.jsonl")
+                   default="output/task1/finetune/qwen3-8b-task1-risk-lora.jsonl")
     p.add_argument("--max_new_tokens", type=int, default=1024)
     p.add_argument("--batch_size",     type=int, default=2)
     p.add_argument("--start_index",    type=int, default=0)

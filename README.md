@@ -99,12 +99,18 @@ python eval/eval_readback.py output/task2/ablation/
 
 Produces ET-MF1, RL-Acc, DDR (Danger Downgrade Rate), and WDS (Weighted Downgrade Severity).
 
-**Expected input format** — each line of a prediction JSONL:
+**Expected input format** — each line of a prediction JSONL (matches `infer_task2.py` output):
 
 ```json
 {
   "id": "rb1k_0001",
-  "prediction": {
+  "groundtruth": {
+    "is_correct": false,
+    "error_type": "VALUE_HIGH",
+    "risk_level": "HIGH",
+    "affected_slot": "speed"
+  },
+  "predict": {
     "is_correct": false,
     "error_type": "VALUE_HIGH",
     "risk_level": "HIGH",

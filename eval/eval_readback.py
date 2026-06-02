@@ -65,7 +65,7 @@ def extract(records):
     for r in records:
         gt  = r.get("groundtruth", {})
         pr  = r.get("predict", {})
-        ids.append(r.get("meta", {}).get("id", ""))
+        ids.append(r.get("id", ""))
         gt_correct.append(gt.get("is_correct"))
         pr_correct.append(pr.get("is_correct"))
         gt_etype.append(gt.get("error_type", ""))
