@@ -10,7 +10,7 @@ Usage (on AutoDL):
       --num_train_epochs 3 \
       --per_device_train_batch_size 4 \
       --gradient_accumulation_steps 4 \
-      --max_length 2048
+      --max_length 8192
 """
 
 import os
@@ -54,7 +54,7 @@ def parse_args() -> argparse.Namespace:
                    default="/root/autodl-tmp/data/task1/val.jsonl")
     p.add_argument("--output_dir",  type=str,
                    default="/root/autodl-tmp/output/qwen3-8b-atc-risk-lora")
-    p.add_argument("--max_length",  type=int,   default=2048)
+    p.add_argument("--max_length",  type=int,   default=8192)
     p.add_argument("--num_train_epochs",             type=int,   default=3)
     p.add_argument("--per_device_train_batch_size",  type=int,   default=4)
     p.add_argument("--gradient_accumulation_steps",  type=int,   default=4)

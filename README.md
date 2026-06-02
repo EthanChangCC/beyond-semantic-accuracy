@@ -262,12 +262,12 @@ pip install transformers>=4.51 peft>=0.18 torch>=2.3 accelerate datasets
 
 ```bash
 python risk_aware/train_task1.py \
-    --base_model  Qwen/Qwen3-8B \
-    --train_file  data-finetune/task1/train.jsonl \
-    --val_file    data-finetune/task1/val.jsonl \
-    --output_dir  output/task1-risk-lora \
-    --epochs      3 \
-    --max_length  8192
+    --model_name_or_path  Qwen/Qwen3-8B \
+    --train_file          data-finetune/task1/train.jsonl \
+    --val_file            data-finetune/task1/val.jsonl \
+    --output_dir          output/task1-risk-lora \
+    --num_train_epochs    3 \
+    --max_length          8192
 ```
 
 Training time: ~89 min on a single NVIDIA A800 80 GB.
@@ -288,6 +288,21 @@ Training time: ~17 min on a single NVIDIA A800 80 GB.
 ### CE Baseline (Task 1, via LLaMA-Factory)
 
 The standard CE baseline (`task1-ce-lora`) was trained with LLaMA-Factory using the config in `configs/task1_lora_fast.yaml`.
+
+### Training Configuration Comparison
+
+The CE baseline and Risk-Aware model differ in three respects beyond the loss function:
+
+| Setting | CE Baseline (`task1-ce-lora`) | Risk-Aware (`task1-risk-lora`) |
+|---|---|---|
+| Training framework | LLaMA-Factory | Custom HuggingFace Trainer (`risk_aware/`) |
+| Max sequence length | 2048 | 8192 |
+| Training epochs | 2 | 3 |
+| Batch size / device | 8 | 4 |
+| Gradient accumulation | 2 | 4 |
+| Effective batch size | 16 | 16 |
+
+> **Note:** The observed AR-Geo improvement (0.515 → 0.686) reflects the combined effect of the risk-aware loss function **and** the differences in sequence length and training epochs listed above. These configurations match those used in the paper experiments exactly.
 
 ---
 
