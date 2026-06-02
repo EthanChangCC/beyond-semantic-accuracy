@@ -291,18 +291,18 @@ The standard CE baseline (`task1-ce-lora`) was trained with LLaMA-Factory using 
 
 ### Training Configuration Comparison
 
-The CE baseline and Risk-Aware model differ in three respects beyond the loss function:
+The CE baseline and Risk-Aware model share the same max sequence length (8192) but differ in two other respects:
 
 | Setting | CE Baseline (`task1-ce-lora`) | Risk-Aware (`task1-risk-lora`) |
 |---|---|---|
 | Training framework | LLaMA-Factory | Custom HuggingFace Trainer (`risk_aware/`) |
-| Max sequence length | 2048 | 8192 |
+| Max sequence length | 8192 | 8192 |
 | Training epochs | 2 | 3 |
 | Batch size / device | 8 | 4 |
 | Gradient accumulation | 2 | 4 |
 | Effective batch size | 16 | 16 |
 
-> **Note:** The observed AR-Geo improvement (0.515 → 0.686) reflects the combined effect of the risk-aware loss function **and** the differences in sequence length and training epochs listed above. These configurations match those used in the paper experiments exactly.
+> **Note:** The observed AR-Geo improvement (0.515 → 0.686) reflects the combined effect of the risk-aware loss function and the difference in training epochs (2 vs 3). These configurations match those used in the paper experiments exactly.
 
 ---
 
