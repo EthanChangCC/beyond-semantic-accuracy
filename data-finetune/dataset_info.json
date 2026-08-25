@@ -28,7 +28,7 @@
     }
   },
   "atc_task2_train": {
-    "file_name": "task2/train.jsonl",
+    "file_name": "task2/train_2853.jsonl",
     "formatting": "sharegpt",
     "columns": {
       "messages": "messages"

@@ -57,6 +57,8 @@ Given an ATC controller utterance, extract:
 - `utterance_action`: list of action types (e.g., `altitude_control`, `heading_control`)
 - `tokens`: token-level semantic slot labels (e.g., `altitude`, `heading`, `runway`)
 
+The evaluation split retains the full annotation schema used in the paper, including low-weight contextual labels such as `relation` and `attribute`. Some fine-tuning prompts map purely functional relation/attribute tokens to `O`; all systems are scored with the same released evaluator.
+
 **Evaluation metric:** AR-Geo (weighted geometric mean; missing critical slots collapse the score)
 
 ### Task 2 — Safety-Aware Readback Verification
@@ -67,7 +69,7 @@ Given a controller utterance and a pilot readback, classify:
 - `risk_level`: `CORRECT` / `HIGH` / `CRITICAL` / `EXTREME`
 - `affected_slot` and `explanation`
 
-**Evaluation metrics:** ET-MF1, RL-Acc, DDR (Danger Downgrade Rate), WDS (Weighted Downgrade Severity)
+**Evaluation metrics:** ET-MF1, RL-Acc, DDR (Dangerous Downgrade Rate), WDS (Weighted Downgrade Severity)
 
 ---
 
@@ -77,13 +79,13 @@ Given a controller utterance and a pilot readback, classify:
 
 ```bash
 # Score one or more model output files (JSONL with 'prediction' field)
-python eval/eval_task1_nonlinear.py output/task1/zeroshot/gpt-4o-mini.jsonl
+python eval/eval_task1_nonlinear.py <prediction-jsonl-or-directory>
 
 # Score a whole directory
-python eval/eval_task1_nonlinear.py output/task1/zeroshot/
+python eval/eval_task1_nonlinear.py <prediction-jsonl-or-directory>
 
 # AR-Lin baseline only
-python eval/eval_task1.py output/task1/zeroshot/
+python eval/eval_task1.py <prediction-jsonl-or-directory>
 ```
 
 Produces AR-Geo, AR-Lin, and ERP scores side-by-side. AR-Geo is the primary metric reported in the paper: it applies a weighted geometric mean where any missing critical slot collapses the score toward zero.
@@ -91,13 +93,13 @@ Produces AR-Geo, AR-Lin, and ERP scores side-by-side. AR-Geo is the primary metr
 ### Task 2
 
 ```bash
-python eval/eval_readback.py output/task2/zeroshot/deepseek-chat.jsonl
+python eval/eval_readback.py <prediction-jsonl-or-directory>
 
 # Directory (prints per-model table)
-python eval/eval_readback.py output/task2/ablation/
+python eval/eval_readback.py <prediction-jsonl-or-directory>
 ```
 
-Produces ET-MF1, RL-Acc, DDR (Danger Downgrade Rate), and WDS (Weighted Downgrade Severity).
+Produces ET-MF1, RL-Acc, DDR (Dangerous Downgrade Rate), and WDS (Weighted Downgrade Severity). WDS is normalized over all examples, with zero contribution from non-downgraded cases.
 
 **Expected input format** — each line of a prediction JSONL (matches `infer_task2.py` output):
 
@@ -385,10 +387,10 @@ Balanced evaluation set — 10 error types × 100 entries each.
 ## Citation
 
 ```bibtex
-@inproceedings{anonymous2025beyond,
+@inproceedings{chang2026beyondsemanticaccuracy,
   title     = {Beyond Semantic Accuracy: Consequence-Aware Evaluation for Safety-Critical Language Understanding},
-  booktitle = {Proceedings of EMNLP},
-  year      = {2025},
-  note      = {Under review}
+  author    = {Chang, Yujing and Pham, Thinh and Thai, Van-Phat and Ma, Chunyao and Guleria, Yash and Pham, Nhut Huy and Alam, Sameer},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  year      = {2026}
 }
 ```

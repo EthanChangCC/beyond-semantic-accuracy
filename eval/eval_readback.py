@@ -20,8 +20,8 @@ Metrics:
     1. is_correct   Accuracy
     2. error_type   Macro-F1   (10 classes)
     3. risk_level   Exact Accuracy
-    4. risk_level   Danger Downgrade Rate  (GT risk > predicted risk)
-    5. risk_level   Weighted Downgrade Severity
+    4. risk_level   Dangerous Downgrade Rate  (GT risk > predicted risk)
+    5. risk_level   Weighted Downgrade Severity  (normalized over all examples)
     6. CONSTRAINT_HIGH  F1  (key blind-spot metric)
 """
 
@@ -106,22 +106,20 @@ def danger_downgrade_rate(gt_risk, pr_risk):
 
 def weighted_downgrade_severity(gt_risk, pr_risk):
     """
-    Average normalized downgrade distance on erroneous samples.
+    Normalized downgrade mass over all examples.
 
-    0.0 = no underestimation
-    1.0 = every erroneous sample is downgraded by the maximum possible gap
-          (e.g. EXTREME -> CORRECT)
+    Non-downgraded examples contribute 0.0. This matches the paper definition,
+    where WDS uses N as the denominator rather than only downgraded/error cases.
     """
-    errors = [(g, p) for g, p in zip(gt_risk, pr_risk) if g != "CORRECT"]
-    if not errors:
+    if not gt_risk:
         return 0.0
 
     max_gap = max(RISK_ORDER.values()) - min(RISK_ORDER.values())
     severity = sum(
         max(0, RISK_ORDER.get(g, 0) - RISK_ORDER.get(p, 0)) / max_gap
-        for g, p in errors
+        for g, p in zip(gt_risk, pr_risk)
     )
-    return severity / len(errors)
+    return severity / len(gt_risk)
 
 
 # ── Core evaluate ─────────────────────────────────────────────────────────────

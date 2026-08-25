@@ -8,7 +8,7 @@ Two-level weighting:
 Usage (on AutoDL):
   python train_task2.py \
       --model_name_or_path /root/autodl-tmp/models/Qwen3-8B \
-      --train_file      /root/autodl-tmp/data/task2/train.jsonl \
+      --train_file      /root/autodl-tmp/data/task2/train_2853.jsonl \
       --val_file        /root/autodl-tmp/data/task2/val.jsonl \
       --output_dir      /root/autodl-tmp/output/qwen3-8b-atc-task2-risk-lora \
       --num_train_epochs 5
@@ -48,7 +48,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--model_name_or_path", type=str,
                    default="/root/autodl-tmp/models/Qwen3-8B")
     p.add_argument("--train_file",  type=str,
-                   default="/root/autodl-tmp/data/task2/train.jsonl")
+                   default="/root/autodl-tmp/data/task2/train_2853.jsonl")
     p.add_argument("--val_file",    type=str,
                    default="/root/autodl-tmp/data/task2/val.jsonl")
     p.add_argument("--output_dir",  type=str,
