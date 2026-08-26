@@ -306,8 +306,8 @@ The CE baseline and Risk-Aware model share the same max sequence length (8192) b
 | Training framework | LLaMA-Factory | Custom HuggingFace Trainer (`risk_aware/`) |
 | Max sequence length | 8192 | 8192 |
 | Training epochs | 2 | 3 |
-| Batch size / device | 8 | 4 |
-| Gradient accumulation | 2 | 4 |
+| Batch size / device | 8 | 8 |
+| Gradient accumulation | 2 | 2 |
 | Effective batch size | 16 | 16 |
 
 > **Note:** The observed AR-Geo improvement (0.515 → 0.686) reflects the combined effect of the risk-aware loss function and the difference in training epochs (2 vs 3). These configurations match those used in the paper experiments exactly.

@@ -11,7 +11,9 @@ Usage (on AutoDL):
       --train_file      /root/autodl-tmp/data/task2/train_2853.jsonl \
       --val_file        /root/autodl-tmp/data/task2/val.jsonl \
       --output_dir      /root/autodl-tmp/output/qwen3-8b-atc-task2-risk-lora \
-      --num_train_epochs 5
+      --num_train_epochs 5 \
+      --per_device_train_batch_size 8 \
+      --gradient_accumulation_steps 2
 """
 
 import os
@@ -55,8 +57,8 @@ def parse_args() -> argparse.Namespace:
                    default="/root/autodl-tmp/output/qwen3-8b-atc-task2-risk-lora")
     p.add_argument("--max_length",  type=int,   default=2048)
     p.add_argument("--num_train_epochs",             type=int,   default=5)
-    p.add_argument("--per_device_train_batch_size",  type=int,   default=4)
-    p.add_argument("--gradient_accumulation_steps",  type=int,   default=4)
+    p.add_argument("--per_device_train_batch_size",  type=int,   default=8)
+    p.add_argument("--gradient_accumulation_steps",  type=int,   default=2)
     p.add_argument("--learning_rate",                type=float, default=1e-4)
     p.add_argument("--lora_rank",    type=int,   default=32)
     p.add_argument("--lora_alpha",   type=int,   default=64)

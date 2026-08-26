@@ -8,8 +8,8 @@ Usage (on AutoDL):
       --val_file        /root/autodl-tmp/data/task1/val.jsonl \
       --output_dir      /root/autodl-tmp/output/qwen3-8b-atc-risk-lora \
       --num_train_epochs 3 \
-      --per_device_train_batch_size 4 \
-      --gradient_accumulation_steps 4 \
+      --per_device_train_batch_size 8 \
+      --gradient_accumulation_steps 2 \
       --max_length 8192
 """
 
@@ -56,8 +56,8 @@ def parse_args() -> argparse.Namespace:
                    default="/root/autodl-tmp/output/qwen3-8b-atc-risk-lora")
     p.add_argument("--max_length",  type=int,   default=8192)
     p.add_argument("--num_train_epochs",             type=int,   default=3)
-    p.add_argument("--per_device_train_batch_size",  type=int,   default=4)
-    p.add_argument("--gradient_accumulation_steps",  type=int,   default=4)
+    p.add_argument("--per_device_train_batch_size",  type=int,   default=8)
+    p.add_argument("--gradient_accumulation_steps",  type=int,   default=2)
     p.add_argument("--learning_rate",                type=float, default=1e-4)
     p.add_argument("--lora_rank",   type=int,   default=32)
     p.add_argument("--lora_alpha",  type=int,   default=64)
