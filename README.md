@@ -11,7 +11,9 @@ This repository contains datasets, prompts, evaluation scripts, fine-tuning scri
 │   ├── task1/
 │   │   ├── train.jsonl             # Task 1 train set (2035 utterances)
 │   │   ├── val.jsonl               # Task 1 val set   (200 utterances)
-│   │   └── eval.jsonl              # Task 1 test set  (500 utterances,)
+│   │   ├── eval.jsonl              # Task 1 test set  (500 utterances) — reproduces the paper
+│   │   ├── eval_revised.jsonl      # Same 500 utterances, audited annotations — use for new work
+│   │   └── ANNOTATION_REVISIONS.md # What changed between the two, and why
 │   └── task2/
 │       ├── readback_1000.jsonl     # Task 2 test set  (1000 readback pairs, 10×100)
 │       ├── train_2853.jsonl        # Task 2 train set (2853 entries, augmented)
@@ -58,6 +60,8 @@ Given an ATC controller utterance, extract:
 - `tokens`: token-level semantic slot labels (e.g., `altitude`, `heading`, `runway`)
 
 The evaluation split retains the full annotation schema used in the paper, including low-weight contextual labels such as `relation` and `attribute`. Some fine-tuning prompts map purely functional relation/attribute tokens to `O`; all systems are scored with the same released evaluator.
+
+**Two annotation revisions are shipped.** `eval.jsonl` holds the annotations the paper's reported numbers were computed on; `eval_revised.jsonl` holds a later audited revision that differs on 113 of the 500 samples. Both have identical ids, order and sentences, so either can be passed to the released evaluator — but numbers from the two are not comparable, and new work should use the revised file and say so. See [`data-finetune/task1/ANNOTATION_REVISIONS.md`](data-finetune/task1/ANNOTATION_REVISIONS.md).
 
 **Evaluation metric:** AR-Geo (weighted geometric mean; missing critical slots collapse the score)
 
@@ -126,7 +130,7 @@ Produces ET-MF1, RL-Acc, DDR (Dangerous Downgrade Rate), and WDS (Weighted Downg
 
 ## Dataset Format
 
-### Task 1 (`train.jsonl` / `val.jsonl` / `eval.jsonl`)
+### Task 1 (`train.jsonl` / `val.jsonl` / `eval.jsonl` / `eval_revised.jsonl`)
 
 ```json
 {
